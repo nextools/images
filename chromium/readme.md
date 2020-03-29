@@ -1,19 +1,18 @@
 # chromium
 
-Dockerized Chromium in [headless + remote debugging mode](https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md).
+[![version](https://img.shields.io/badge/version-80.0.3987.87-blue.svg?style=flat-square)](https://packages.ubuntu.com/bionic/chromium-browser)
 
-Latest tags:
-* `80`
-* `80.0`
-* `80.0.3987`
-* `80.0.3987.87`
-* `latest`
+Dockerized Chromium in [headless + remote debugging mode](https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md).
 
 ## Usage
 
 ### Login
 
 See [login section](../readme.md#login) in the root readme.
+
+### Version
+
+Chromium version is atomatically split into multiple Docker tags, for example if current version is `80.0.3987.87` then `80`, `80.0`, `80.0.3987`, `80.0.3987.87` and `latest` tags are available.
 
 ### Run
 
@@ -71,4 +70,4 @@ docker run -it --rm -p 9222:9222 -v $(pwd)/path/to/fonts:/home/chromium/.fonts d
 ### push necessary tags out of new version
 
 1. `make get-version` to print the full version of the latest [Chromium for Ubuntu "Bionic" 18.04 LTS](https://packages.ubuntu.com/bionic/chromium-browser)
-2. `make tags version=<VERSION>` to automatically make and push 5 tags: for example version `80.0.3987.87` leads to `80`, `80.0`, `80.0.3987`, `80.0.3987.87` and `latest` tags
+2. `make tags version=<VERSION>` to automatically make and push 5 tags
