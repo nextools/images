@@ -24,7 +24,7 @@ jobs:
 
       - name: Get arg
         id: get_arg
-        run: echo ::set-output name=result::$(echo ${{ steps.get_version.outputs.result }} | sed -E s/latest//)
+        run: echo ::set-output name=result::$(echo ${{ steps.get_version.outputs.result }} | sed -E s/^latest$//)
 
       - name: Print
         run: |
