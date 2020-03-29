@@ -1,0 +1,36 @@
+name: cron
+
+on:
+  schedule:
+    # every 8 hours
+    - cron:  '0 */8 * * *'
+
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=result::$(make --file chromium/Makefile get-version)
+
+      - name: Check version
+        id: check_version
+        run: echo ::set-output name=result::$(git tag | grep chromium@${{ steps.get_version.outputs.result }})
+
+      - name: Make changes
+        if: steps.check_version.outputs.result == ''
+        run: sed -Ei "s/version-.+-blue/version-${{ steps.get_version.outputs.result }}-blue/" chromium/readme.md
+
+      - name: Open a PR
+        if: steps.check_version.outputs.result == ''
+        uses: peter-evans/create-pull-request@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}`
+          title: ♻️ Chromium ${{ steps.get_version.outputs.result }}
+          body: https://www.chromestatus.com/features/schedule
+          commit-message: ♻️ Chromium ${{ steps.get_version.outputs.result }}
+          branch: chromium/${{ steps.get_version.outputs.result }}
