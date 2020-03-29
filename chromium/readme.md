@@ -13,10 +13,7 @@ Latest tags:
 
 ### Login
 
-This is ridiculous but [you have to login to GitHub Packages with Docker even to pull images](https://github.community/t5/GitHub-Actions/docker-pull-from-public-GitHub-Package-Registry-fail-with-quot/td-p/32782):
-
-1. Generate a personal access token [here](https://github.com/settings/tokens) with `read:packages` scope
-2. Login with `docker login docker.pkg.github.com -u <USERNAME>` using the token
+See [login section](../readme.md#login) in the root readme.
 
 ### Run
 
@@ -51,7 +48,7 @@ await browser.close()
 
 ### specify a different port
 
-Container uses a `RD_PORT` env var, which is just `9222` by default:
+Container uses a `RD_PORT` [environment variable](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file), which is `9222` by default:
 
 ```
 docker run -it --rm -p 9223:9223 -e RD_PORT=9223 docker.pkg.github.com/nextools/images/chromium:80
@@ -60,7 +57,7 @@ docker run -it --rm -p 9223:9223 -e RD_PORT=9223 docker.pkg.github.com/nextools/
 ### pass additional Chromium arguments
 
 ```
-docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/chromium:80 --some-arg
+docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/chromium:80 --some-chromium-arg
 ```
 
 ### add custom fonts
@@ -71,7 +68,7 @@ It's possible to mount a folder with custom fonts to be used later by Chromium:
 docker run -it --rm -p 9222:9222 -v $(pwd)/path/to/fonts:/home/chromium/.fonts docker.pkg.github.com/nextools/images/chromium:80
 ```
 
-### push a new version
+### push necessary tags out of new version
 
 1. `make get-version` to print the full version of the latest [Chromium for Ubuntu "Bionic" 18.04 LTS](https://packages.ubuntu.com/bionic/chromium-browser)
 2. `make tags version=<VERSION>` to automatically make and push 5 tags: for example version `80.0.3987.87` leads to `80`, `80.0`, `80.0.3987`, `80.0.3987.87` and `latest` tags
