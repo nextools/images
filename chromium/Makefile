@@ -13,13 +13,12 @@ tags:
 
 	@for i in 3 2 1 0 -1; do \
 		if [[ $$i -ge 0 ]]; then \
-			tag="`echo $(version) | sed -En "s/(\.[0-9]+){$$i}$$//p"`"; \
+			tag=`echo $(version) | sed -E "s/(\.[0-9]+){$$i}$$//"`; \
 		else \
-			tag="latest"; \
+			tag=latest; \
 		fi; \
+		tag=chromium@$$tag; \
 		echo $$tag; \
-		git tag --force chromium-remote-debugging@$$tag; \
-		git push --delete --quiet origin $$tag 2> /dev/null || true; \
+		git tag --force $$tag >/dev/null 2>&1; \
+		git push --force origin $$tag >/dev/null 2>&1; \
 	done
-
-	@git push origin --follow-tags

@@ -1,0 +1,42 @@
+name: Docker
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get package
+        id: get_package
+        run: echo ::set-output name=result::$(echo $GITHUB_REF | sed -E 's/^refs\/tags\/(.+)@.*$/\1/')
+
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=result::$(echo $GITHUB_REF | sed -E 's/^.*@(.+)$/\1/')
+
+      - name: Get arg
+        id: get_arg
+        run: echo ::set-output name=result::$(echo ${{ steps.get_version.outputs.result }} | sed -E s/latest//)
+
+      - name: Print
+        run: |
+          echo package ${{ steps.get_package.outputs.result }}
+          echo version ${{ steps.get_version.outputs.result }}
+          echo arg ${{ steps.get_arg.outputs.result }}
+
+      - name: Build
+        run: docker build --tag docker.pkg.github.com/nextools/images/${{ steps.get_package.outputs.result }}:${{ steps.get_version.outputs.result }} --build-arg VERSION=${{ steps.get_arg.outputs.result }} ${{ steps.get_package.outputs.result }}
+
+      - name: Login
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login -u ${{ github.actor }} --password-stdin docker.pkg.github.com
+
+      - name: Push
+        run: docker push docker.pkg.github.com/nextools/images/${{ steps.get_package.outputs.result }}:${{ steps.get_version.outputs.result }}

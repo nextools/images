@@ -2,7 +2,12 @@
 
 Dockerized Chromium in [headless + remote debugging mode](https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md).
 
-Work in progress, nothing has been pushed to the registry yet.
+Latest tags:
+* `80`
+* `80.0`
+* `80.0.3987`
+* `80.0.3987.87`
+* `latest`
 
 ## Usage
 
