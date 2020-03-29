@@ -17,8 +17,8 @@ tags:
 		else \
 			tag=latest; \
 		fi; \
-		tag=chromium@$$tag; \
 		echo $$tag; \
+		tag=chromium@$$tag; \
 		git tag --force $$tag >/dev/null 2>&1; \
 		git push --force origin $$tag >/dev/null 2>&1; \
 	done
