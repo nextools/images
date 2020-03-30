@@ -23,7 +23,7 @@ jobs:
 
       - name: Make changes
         if: steps.check_version.outputs.result == ''
-        run: sed -Ei "s/version-.+-blue/version-${{ steps.get_version.outputs.result }}-blue/" chromium/readme.md
+        run: sed -Ei 's/version-.+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' chromium/readme.md
 
       - name: Open a PR
         if: steps.check_version.outputs.result == ''
