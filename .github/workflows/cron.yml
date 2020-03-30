@@ -19,14 +19,14 @@ jobs:
 
       - name: Check version
         id: check_version
-        run: echo ::set-output name=result::$(git tag | grep chromium@${{ steps.get_version.outputs.result }})
+        run: echo ::set-output name=result::$(git tag | grep chromium@${{ steps.get_version.outputs.result }}; echo $?)
 
       - name: Make changes
-        if: contains(steps.check_version.outputs.result, 'chromium') == false
+        if: steps.check_version.outputs.result == '1'
         run: sed -Ei 's/version-.+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' chromium/readme.md
 
       - name: Open a PR
-        if: contains(steps.check_version.outputs.result, 'chromium') == false
+        if: steps.check_version.outputs.result == '1'
         uses: peter-evans/create-pull-request@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}`
