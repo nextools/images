@@ -10,14 +10,14 @@ Dockerized Chromium in [headless + remote debugging mode](https://chromium.googl
 
 See [login section](../readme.md#login) in the root readme.
 
-### Version
+### Versions
 
-Chromium version is atomatically split into multiple Docker tags, for example if current version is `80.0.3987.87` then `80`, `80.0`, `80.0.3987`, `80.0.3987.87` and `latest` tags are available.
+Chromium version is atomatically split into multiple Docker tags ("versions"), for example version `80.0.3987.87` produces `80`, `80.0`, `80.0.3987`, `80.0.3987.87` and `latest`. See the [list of versions available to use](https://github.com/nextools/images/packages/165734/versions).
 
 ### Run
 
 ```sh
-docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/chromium:80
+docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/chromium:<VERSION>
 ```
 
 ### Puppeteer
@@ -25,7 +25,7 @@ docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/chromium:
 Ensure to match version of [`puppeteer-core`](https://github.com/GoogleChrome/puppeteer) to the version of Chromium you are using:
 
 ```sh
-yarn add puppeteer-core@chrome-80
+yarn add puppeteer-core@chrome-<MAJOR_VERSION>
 ```
 
 ```js
@@ -50,13 +50,13 @@ await browser.close()
 Container uses a `RD_PORT` [environment variable](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file), which is `9222` by default:
 
 ```
-docker run -it --rm -p 9223:9223 -e RD_PORT=9223 docker.pkg.github.com/nextools/images/chromium:80
+docker run -it --rm -p 9223:9223 -e RD_PORT=9223 docker.pkg.github.com/nextools/images/chromium:<VERSION>
 ```
 
 ### pass additional Chromium arguments
 
 ```
-docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/chromium:80 --some-chromium-arg
+docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/chromium:<VERSION> --some-chromium-arg
 ```
 
 ### add custom fonts
@@ -64,7 +64,7 @@ docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/chromium:
 It's possible to mount a folder with custom fonts to be used later by Chromium: 
 
 ```
-docker run -it --rm -p 9222:9222 -v $(pwd)/path/to/fonts:/home/chromium/.fonts docker.pkg.github.com/nextools/images/chromium:80
+docker run -it --rm -p 9222:9222 -v $(pwd)/path/to/fonts:/home/chromium/.fonts docker.pkg.github.com/nextools/images/chromium:<VERSION>
 ```
 
 ### push necessary tags out of new version
