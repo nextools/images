@@ -14,7 +14,7 @@ See [login section](../readme.md#login) in the root readme.
 
 ### Versions
 
-Firefox version is atomatically split into multiple Docker tags ("versions"), for example version `76.0` produces `76`, `76.0` and `latest`.
+Firefox version is atomatically split into multiple Docker tags ("versions"), for example version `76.0` produces `76`, `76.0` and `latest`.  See the [list of versions available to use](https://github.com/nextools/images/packages/166489/versions).
 
 ### Run
 
