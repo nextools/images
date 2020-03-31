@@ -1,7 +1,7 @@
 .PHONY: get-version tags
 
 get-version:
-	@docker run -it --rm \
+	@docker run --rm \
 		ubuntu:bionic \
 		sh -c "apt-get update -qq && apt-cache policy firefox | sed -En 's/.*Candidate: (.+)\+.+/\1/p'"
 
