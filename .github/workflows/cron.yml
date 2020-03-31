@@ -29,7 +29,7 @@ jobs:
         if: steps.check_version.outputs.result == '1'
         uses: peter-evans/create-pull-request@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}`
+          token: ${{ secrets.GITHUB_TOKEN }}
           title: ♻️ Chromium ${{ steps.get_version.outputs.result }}
           body: https://www.chromestatus.com/features/schedule
           commit-message: ♻️ Chromium ${{ steps.get_version.outputs.result }}
