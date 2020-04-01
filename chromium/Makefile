@@ -1,9 +1,21 @@
-.PHONY: get-version tags
+.PHONY: get-version test tags
 
 get-version:
 	@docker run --rm \
 		ubuntu:bionic \
 		sh -c "apt-get update -qq && apt-cache policy chromium-browser | sed -En 's/.*Candidate: (.+)-.+/\1/p'"
+
+test:
+	@if [ -z $(version) ]; then \
+		echo "\`version\` argument is required" 1>&2; \
+		exit 1; \
+	fi
+
+	@docker build --tag chromium --build-arg VERSION=$(version) .
+
+	@docker run --detach --publish 9222:9222 --name chromium chromium
+
+	@timeout 15s sh -c "trap 'docker container rm --force chromium' 0; until curl http://localhost:9222/json/version; do sleep 1; done"
 
 tags:
 	@if [ -z $(version) ]; then \
