@@ -11,7 +11,7 @@ test:
 		exit 1; \
 	fi
 
-	@docker build --tag chromium --build-arg VERSION=$(version) .
+	@docker build --tag chromium --build-arg VERSION=$(version) chromium
 
 	@docker run --detach --publish 9222:9222 --name chromium chromium
 
