@@ -6,8 +6,14 @@ on:
     - cron:  '0 */8 * * *'
 
 jobs:
-  chromium:
+  check:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        package:
+          - chromium
+          # - firefox
 
     steps:
       - name: Checkout
@@ -15,22 +21,22 @@ jobs:
 
       - name: Get version
         id: get_version
-        run: echo ::set-output name=result::$(make --file chromium/Makefile get-version)
+        run: echo ::set-output name=result::$(make --file ${{ matrix.package }}/Makefile get-version)
 
       - name: Check version
         id: check_version
-        run: echo ::set-output name=result::$(git tag | grep chromium@${{ steps.get_version.outputs.result }}; echo $?)
+        run: echo ::set-output name=result::$(git tag | grep ${{ matrix.package }}@${{ steps.get_version.outputs.result }}; echo $?)
 
       - name: Make changes
         if: steps.check_version.outputs.result == '1'
-        run: sed -Ei 's/version-.+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' chromium/readme.md
+        run: sed -Ei 's/version-.+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
 
       - name: Open a PR
         if: steps.check_version.outputs.result == '1'
         uses: peter-evans/create-pull-request@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: ♻️ Chromium ${{ steps.get_version.outputs.result }}
+          title: ♻️ ${{ matrix.package }} ${{ steps.get_version.outputs.result }}
           body: https://www.chromestatus.com/features/schedule
-          commit-message: ♻️ Chromium ${{ steps.get_version.outputs.result }}
-          branch: chromium/${{ steps.get_version.outputs.result }}
+          commit-message: ♻️ ${{ matrix.package }} ${{ steps.get_version.outputs.result }}
+          branch: ${{ matrix.package }}/${{ steps.get_version.outputs.result }}
