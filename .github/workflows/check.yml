@@ -1,4 +1,4 @@
-name: Cron
+name: Check for updates and open a PR
 
 on:
   schedule:
