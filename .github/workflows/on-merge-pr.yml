@@ -34,5 +34,5 @@ jobs:
           echo version ${{ steps.get_version.outputs.result }}
           echo arg ${{ steps.get_arg.outputs.result }}
 
-      - name: Run test
+      - name: Tags
         run: make --file ${{ steps.get_package.outputs.result }}/Makefile tags version=${{ steps.get_version.outputs.result }}
