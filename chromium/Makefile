@@ -26,7 +26,7 @@ tags:
 	fi
 
 	@for i in 3 2 1 0 -1; do \
-		if [[ $$i -ge 0 ]]; then \
+		if [ $$i -ge 0 ]; then \
 			tag=`echo $(version) | sed -E "s/(\.[0-9]+){$$i}$$//"`; \
 		else \
 			tag=latest; \
