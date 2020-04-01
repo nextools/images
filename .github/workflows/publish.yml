@@ -15,11 +15,11 @@ jobs:
 
       - name: Get package
         id: get_package
-        run: echo ::set-output name=result::$(echo $GITHUB_REF | sed -E 's/^refs\/tags\/(.+)@.*$/\1/')
+        run: echo ::set-output name=result::$(echo $GITHUB_REF | sed -E 's/^refs\/tags\/(.+)@.+$/\1/')
 
       - name: Get version
         id: get_version
-        run: echo ::set-output name=result::$(echo $GITHUB_REF | sed -E 's/^.*@(.+)$/\1/')
+        run: echo ::set-output name=result::$(echo $GITHUB_REF | sed -E 's/^.+@(.+)$/\1/')
 
       - name: Get arg
         id: get_arg
