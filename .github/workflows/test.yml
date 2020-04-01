@@ -1,0 +1,18 @@
+name: Test Docker image
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Print
+        run: echo ${{ github.event.pull_request.head.ref }}
