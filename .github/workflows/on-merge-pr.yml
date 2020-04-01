@@ -10,7 +10,7 @@ on:
 jobs:
   tags:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.user.login == 'github-actions' && github.event.pull_request.merged == true
 
     steps:
       - name: Checkout
