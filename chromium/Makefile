@@ -1,5 +1,7 @@
 .PHONY: get-version test tags
 
+CURRENT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
 get-version:
 	@docker run --rm \
 		ubuntu:bionic \
@@ -11,7 +13,7 @@ test:
 		exit 1; \
 	fi
 
-	@docker build --tag chromium --build-arg VERSION=$(version) chromium
+	@docker build --tag chromium --build-arg VERSION=$(version) $(CURRENT_DIR)
 
 	@docker run --detach --publish 9222:9222 --name chromium chromium
 
