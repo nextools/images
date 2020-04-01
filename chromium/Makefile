@@ -35,7 +35,8 @@ publish:
 		fi; \
 		echo $$tag; \
 		docker tag chromium docker.pkg.github.com/nextools/images/chromium:$$tag; \
-		docker push docker.pkg.github.com/nextools/images/chromium:$$tag; \
 		git tag --force chromium@$$tag >/dev/null 2>&1; \
 		git push --force origin chromium@$$tag >/dev/null 2>&1; \
 	done
+
+	@docker push docker.pkg.github.com/nextools/images/chromium

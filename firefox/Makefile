@@ -35,7 +35,8 @@ publish:
 		fi; \
 		echo $$tag; \
 		docker tag firefox docker.pkg.github.com/nextools/images/firefox:$$tag; \
-		docker push docker.pkg.github.com/nextools/images/firefox:$$tag; \
 		git tag --force firefox@$$tag >/dev/null 2>&1; \
 		git push --force origin firefox@$$tag >/dev/null 2>&1; \
 	done
+
+	@docker push docker.pkg.github.com/nextools/images/firefox
