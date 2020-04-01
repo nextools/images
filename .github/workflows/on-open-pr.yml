@@ -11,7 +11,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, '[skip ci]') == false
 
     steps:
       - name: Checkout
@@ -25,15 +24,10 @@ jobs:
         id: get_version
         run: echo ::set-output name=result::$(echo ${{ github.event.pull_request.head.ref }} | sed -E 's/^.+\/(.+)$/\1/')
 
-      - name: Get arg
-        id: get_arg
-        run: echo ::set-output name=result::$(echo ${{ steps.get_version.outputs.result }} | sed -E s/^latest$//)
-
       - name: Print
         run: |
           echo package ${{ steps.get_package.outputs.result }}
           echo version ${{ steps.get_version.outputs.result }}
-          echo arg ${{ steps.get_arg.outputs.result }}
 
       - name: Run test
         run: make --file ${{ steps.get_package.outputs.result }}/Makefile test version=${{ steps.get_version.outputs.result }}

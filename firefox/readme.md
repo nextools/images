@@ -66,8 +66,3 @@ It's possible to mount a folder with custom fonts to be used later by Firefox:
 ```
 docker run -it --rm -p 9222:9222 -v $(pwd)/path/to/fonts:/home/firefox/.fonts docker.pkg.github.com/nextools/images/firefox:<VERSION>
 ```
-
-### push necessary tags out of new version
-
-1. `make get-version` to print the full version of the latest [Firefox for Ubuntu "Bionic" 18.04 LTS](https://packages.ubuntu.com/bionic/firefox)
-2. `make tags version=<VERSION>` to automatically make and push 3 tags
