@@ -23,16 +23,16 @@ jobs:
         id: get_version
         run: echo ::set-output name=result::$(make --file ${{ matrix.package }}/Makefile get-version)
 
-      - name: Check version
-        id: check_version
-        run: echo ::set-output name=result::$(git tag | grep ${{ matrix.package }}@${{ steps.get_version.outputs.result }}; echo $?)
+      - name: Check status
+        id: check_status
+        run: echo ::set-output name=result::$(git tag | grep -q ${{ matrix.package }}@${{ steps.get_version.outputs.result }} && echo 'up-to-date' || echo 'outdated')
 
       - name: Make changes
-        if: steps.check_version.outputs.result == '1'
+        if: steps.check_status.outputs.result == 'outdated'
         run: sed -Ei 's/version-.+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
 
       - name: Open a PR
-        if: steps.check_version.outputs.result == '1'
+        if: steps.check_status.outputs.result == 'outdated'
         uses: peter-evans/create-pull-request@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
