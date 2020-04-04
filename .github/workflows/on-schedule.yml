@@ -1,4 +1,4 @@
-name: Check for updates and open a PR
+name: Check for updates and publish
 
 on:
   schedule:
@@ -19,33 +19,59 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Get version
-        id: get_version
-        run: echo ::set-output name=result::$(make --file ${{ matrix.package }}/Makefile get-version)
-
       # https://github.com/actions/checkout#Fetch-all-tags
       - name: Fetch tags
         run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=result::$(make --file ${{ matrix.package }}/Makefile get-version)
+
       - name: Check status
         id: check_status
-        run: echo ::set-output name=result::$(git tag | grep -q ${{ matrix.package }}@${{ steps.get_version.outputs.result }} && echo 'up-to-date' || echo 'outdated')
+        run: echo ::set-output name=result::$(git tag | grep --quiet ${{ matrix.package }}@${{ steps.get_version.outputs.result }} && echo 'up-to-date' || echo 'outdated')
 
-      - name: Print
+      - name: Print results
         run: |
           echo version: ${{ steps.get_version.outputs.result }}
           echo status: ${{ steps.check_status.outputs.result }}
 
-      - name: Make changes
+      - name: Build image
         if: steps.check_status.outputs.result == 'outdated'
-        run: sed -Ei 's/version-.+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
+        run: make --file ${{ steps.get_package.outputs.result }}/Makefile build version=${{ steps.get_version.outputs.result }}
 
-      - name: Open a PR
-        if: steps.check_status.outputs.result == 'outdated'
-        uses: peter-evans/create-pull-request@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: ♻️ ${{ matrix.package }} ${{ steps.get_version.outputs.result }}
-          body: https://www.chromestatus.com/features/schedule
-          commit-message: ♻️ ${{ matrix.package }} ${{ steps.get_version.outputs.result }}
-          branch: ${{ matrix.package }}/${{ steps.get_version.outputs.result }}
+      - name: Test
+        if: success()
+        run: make --file ${{ steps.get_package.outputs.result }}/Makefile test
+
+      - name: Get image size
+        id: get_size
+        if: success()
+        run: |
+          docker save ${{ matrix.package }} | gzip > ${{ matrix.package }}.tar.gz
+          echo ::set-output name=result::$(du --human-readable --apparent-size ${{ matrix.package }}.tar.gz | cut --fields=1)
+          rm ${{ matrix.package }}.tar.gz
+
+      - name: Git pull
+        if: success()
+        run: git pull https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git master
+
+      - name: Update readme
+        if: success()
+        run: |
+          sed --regexp-extended --in-place 's/version-.+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
+          sed --regexp-extended --in-place 's/size-.+-blue/size-'${{ steps.get_size.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
+
+      - name: Make Docker and Git tags
+        if: success()
+        run: make --file ${{ steps.get_package.outputs.result }}/Makefile tags version=${{ steps.get_version.outputs.result }}
+
+      - name: Git commit and push
+        if: success()
+        run: |
+          git commit --all --message '♻️ ${{ matrix.package }}@${{ steps.get_version.outputs.result }}'
+          git push --force --tags https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git master
+
+      - name: Docker push
+        if: success()
+        run: docker push docker.pkg.github.com/nextools/images/${{ matrix.package }}

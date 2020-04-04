@@ -1,6 +1,6 @@
 # firefox
 
-[![version](https://img.shields.io/badge/version-latest-blue.svg?style=flat-square)](https://launchpad.net/~ubuntu-mozilla-daily/+archive/ubuntu/ppa)
+![version](https://img.shields.io/badge/version-latest-blue.svg?style=flat-square) ![size](https://img.shields.io/badge/size-146M-blue.svg?style=flat-square)
 
 Dockerized Firefox in [headless + remote debugging mode](https://wiki.mozilla.org/Remote).
 

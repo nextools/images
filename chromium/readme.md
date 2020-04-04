@@ -1,6 +1,6 @@
 # chromium
 
-[![version](https://img.shields.io/badge/version-80.0.3987.149-blue.svg?style=flat-square)](https://packages.ubuntu.com/bionic/chromium-browser)
+![version](https://img.shields.io/badge/version-80.0.3987.149-blue.svg?style=flat-square) ![size](https://img.shields.io/badge/size-150M-blue.svg?style=flat-square)
 
 Dockerized Chromium in [headless + remote debugging mode](https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md).
 
