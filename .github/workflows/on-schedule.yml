@@ -3,7 +3,7 @@ name: Check for updates and open a PR
 on:
   schedule:
     # every 8 hours
-    - cron:  '0 */1 * * *'
+    - cron:  '0 */8 * * *'
 
 jobs:
   check:
