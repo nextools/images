@@ -25,7 +25,9 @@ jobs:
 
       - name: Check status
         id: check_status
-        run: echo ::set-output name=result::$(git tag | grep -q ${{ matrix.package }}@${{ steps.get_version.outputs.result }} && echo 'up-to-date' || echo 'outdated')
+        run: |
+          git fetch --tags
+          echo ::set-output name=result::$(git tag | grep -q ${{ matrix.package }}@${{ steps.get_version.outputs.result }} && echo 'up-to-date' || echo 'outdated')
 
       - name: Print
         run: |
