@@ -54,7 +54,7 @@ jobs:
 
       - name: Git pull
         if: success()
-        run: git pull https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git master
+        run: git pull https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git master
 
       - name: Update readme
         if: success()
@@ -69,8 +69,12 @@ jobs:
       - name: Git commit and push
         if: success()
         run: |
-          git commit --all --message '♻️ ${{ matrix.package }}@${{ steps.get_version.outputs.result }}'
-          git push --force --tags https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git master
+          git commit --message '♻️ ${{ matrix.package }}@${{ steps.get_version.outputs.result }}' ${{ matrix.package }}/readme.md
+          git push --force --tags https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git master
+
+      - name: Docker login
+        if: success()
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login -u ${{ github.actor }} --password-stdin docker.pkg.github.com
 
       - name: Docker push
         if: success()
