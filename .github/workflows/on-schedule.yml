@@ -25,7 +25,6 @@ jobs:
 
       # https://github.com/actions/checkout#Fetch-all-tags
       - name: Fetch tags
-        uses: actions/checkout@v2
         run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
       - name: Check status
