@@ -27,6 +27,11 @@ jobs:
         id: check_status
         run: echo ::set-output name=result::$(git tag | grep -q ${{ matrix.package }}@${{ steps.get_version.outputs.result }} && echo 'up-to-date' || echo 'outdated')
 
+      - name: Print
+        run: |
+          echo version: ${{ steps.get_version.outputs.result }}
+          echo status: ${{ steps.check_status.outputs.result }}
+
       - name: Make changes
         if: steps.check_status.outputs.result == 'outdated'
         run: sed -Ei 's/version-.+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
