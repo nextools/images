@@ -38,11 +38,11 @@ jobs:
 
       - name: Build image
         if: steps.check_status.outputs.result == 'outdated'
-        run: make --file ${{ steps.get_package.outputs.result }}/Makefile build version=${{ steps.get_version.outputs.result }}
+        run: make --file ${{ matrix.package }}/Makefile build version=${{ steps.get_version.outputs.result }}
 
       - name: Test
         if: success()
-        run: make --file ${{ steps.get_package.outputs.result }}/Makefile test
+        run: make --file ${{ matrix.package }}/Makefile test
 
       - name: Get image size
         id: get_size
@@ -64,7 +64,7 @@ jobs:
 
       - name: Make Docker and Git tags
         if: success()
-        run: make --file ${{ steps.get_package.outputs.result }}/Makefile tags version=${{ steps.get_version.outputs.result }}
+        run: make --file ${{ matrix.package }}/Makefile tags version=${{ steps.get_version.outputs.result }}
 
       - name: Git commit and push
         if: success()
