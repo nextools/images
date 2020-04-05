@@ -41,41 +41,41 @@ jobs:
         run: make --file ${{ matrix.package }}/Makefile build version=${{ steps.get_version.outputs.result }}
 
       - name: Test
-        if: success()
+        if: steps.check_status.outputs.result == 'outdated'
         run: make --file ${{ matrix.package }}/Makefile test
 
       - name: Get image size
         id: get_size
-        if: success()
+        if: steps.check_status.outputs.result == 'outdated'
         run: |
           docker save ${{ matrix.package }} | gzip > ${{ matrix.package }}.tar.gz
           echo ::set-output name=result::$(du --human-readable --apparent-size ${{ matrix.package }}.tar.gz | cut --fields=1)
           rm ${{ matrix.package }}.tar.gz
 
       - name: Git pull
-        if: success()
+        if: steps.check_status.outputs.result == 'outdated'
         run: git pull https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git master
 
       - name: Update readme
-        if: success()
+        if: steps.check_status.outputs.result == 'outdated'
         run: |
           sed --regexp-extended --in-place 's/version-.+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
           sed --regexp-extended --in-place 's/size-.+-blue/size-'${{ steps.get_size.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
 
       - name: Make Docker and Git tags
-        if: success()
+        if: steps.check_status.outputs.result == 'outdated'
         run: make --file ${{ matrix.package }}/Makefile tags version=${{ steps.get_version.outputs.result }}
 
       - name: Git commit and push
-        if: success()
+        if: steps.check_status.outputs.result == 'outdated'
         run: |
           git commit --message '♻️ ${{ matrix.package }}@${{ steps.get_version.outputs.result }}' ${{ matrix.package }}/readme.md
           git push --force --tags https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git master
 
       - name: Docker login
-        if: success()
+        if: steps.check_status.outputs.result == 'outdated'
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login -u ${{ github.actor }} --password-stdin docker.pkg.github.com
 
       - name: Docker push
-        if: success()
+        if: steps.check_status.outputs.result == 'outdated'
         run: docker push docker.pkg.github.com/nextools/images/${{ matrix.package }}
