@@ -1,6 +1,8 @@
 name: Check for updates and publish
 
 on:
+  repository_dispatch:
+    types: trigger
   schedule:
     # every 8 hours
     - cron:  '0 */1 * * *'
