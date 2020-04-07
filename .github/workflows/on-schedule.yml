@@ -5,7 +5,7 @@ on:
     types: trigger
   schedule:
     # every 8 hours
-    - cron:  '0 */1 * * *'
+    - cron:  '0 */8 * * *'
 
 jobs:
   check:
@@ -70,15 +70,17 @@ jobs:
           sed --regexp-extended --in-place 's/version-.+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
           sed --regexp-extended --in-place 's/size-.+-blue/size-'${{ steps.get_size.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
 
+      - name: Git commit
+        if: steps.check_status.outputs.result == 'outdated'
+        run: git commit --message '♻️ ${{ matrix.package }}@${{ steps.get_version.outputs.result }}' ${{ matrix.package }}/readme.md
+
       - name: Make Docker and Git tags
         if: steps.check_status.outputs.result == 'outdated'
         run: make --file ${{ matrix.package }}/Makefile tags version=${{ steps.get_version.outputs.result }}
 
-      - name: Git commit and push
+      - name: Git push
         if: steps.check_status.outputs.result == 'outdated'
-        run: |
-          git commit --message '♻️ ${{ matrix.package }}@${{ steps.get_version.outputs.result }}' ${{ matrix.package }}/readme.md
-          git push --force --tags origin master
+        run: git push --force --tags origin master
 
       - name: Docker login
         if: steps.check_status.outputs.result == 'outdated'
