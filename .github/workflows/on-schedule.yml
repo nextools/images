@@ -52,9 +52,15 @@ jobs:
           echo ::set-output name=result::$(du --human-readable --apparent-size ${{ matrix.package }}.tar.gz | cut --fields=1)
           rm ${{ matrix.package }}.tar.gz
 
+      - name: Git setup
+        run: |
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git remote set-url origin https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
+
       - name: Git pull
         if: steps.check_status.outputs.result == 'outdated'
-        run: git pull https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git master
+        run: git pull origin master
 
       - name: Update readme
         if: steps.check_status.outputs.result == 'outdated'
@@ -70,7 +76,7 @@ jobs:
         if: steps.check_status.outputs.result == 'outdated'
         run: |
           git commit --message '♻️ ${{ matrix.package }}@${{ steps.get_version.outputs.result }}' ${{ matrix.package }}/readme.md
-          git push --force --tags https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git master
+          git push --force --tags origin master
 
       - name: Docker login
         if: steps.check_status.outputs.result == 'outdated'
