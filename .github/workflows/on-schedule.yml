@@ -67,8 +67,8 @@ jobs:
       - name: Update readme
         if: steps.check_status.outputs.result == 'outdated'
         run: |
-          sed --regexp-extended --in-place 's/version-.+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
-          sed --regexp-extended --in-place 's/size-.+-blue/size-'${{ steps.get_size.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
+          sed --regexp-extended --in-place 's/version-[[:alnum:].]+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
+          sed --regexp-extended --in-place 's/size-[[:alnum:].]+-blue/size-'${{ steps.get_size.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
 
       - name: Git commit
         if: steps.check_status.outputs.result == 'outdated'
