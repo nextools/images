@@ -55,6 +55,7 @@ jobs:
           rm ${{ matrix.package }}.tar.gz
 
       - name: Git setup
+        if: steps.check_status.outputs.result == 'outdated'
         run: |
           git config --global user.name 'GitHub'
           git config --global user.email 'noreply@github.com'
