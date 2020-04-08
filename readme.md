@@ -1,5 +1,3 @@
-# images
-
 Monorepo of Docker images auto-published to [GitHub Packages](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages).
 
 ## Login
