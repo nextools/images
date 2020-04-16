@@ -1,0 +1,52 @@
+name: Publish new version
+
+on:
+  repository_dispatch:
+    types: publish
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build image
+        run: make --file ${{ github.event.client_payload.package }}/Makefile build version=${{ github.event.client_payload.version }}
+
+      - name: Test
+        run: make --file ${{ github.event.client_payload.package }}/Makefile test
+
+      - name: Get image size
+        id: get_size
+        run: |
+          docker save ${{ github.event.client_payload.package }} | gzip > ${{ github.event.client_payload.package }}.tar.gz
+          echo ::set-output name=result::$(du --human-readable --apparent-size ${{ github.event.client_payload.package }}.tar.gz | cut --fields=1)
+          rm ${{ github.event.client_payload.package }}.tar.gz
+
+      - name: Git setup
+        run: |
+          git config --global user.name 'GitHub'
+          git config --global user.email 'noreply@github.com'
+          git remote set-url origin https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
+
+      - name: Git pull
+        run: git pull origin master
+
+      - name: Update readme
+        run: |
+          sed --regexp-extended --in-place 's/version-[[:alnum:].]+-blue/version-'${{ github.event.client_payload.version }}'-blue/' ${{ github.event.client_payload.package }}/readme.md
+          sed --regexp-extended --in-place 's/size-[[:alnum:].]+-blue/size-'${{ steps.get_size.outputs.result }}'-blue/' ${{ github.event.client_payload.package }}/readme.md
+
+      - name: Git commit
+        run: git commit --message '♻️ ${{ github.event.client_payload.package }}@${{ github.event.client_payload.version }}' ${{ github.event.client_payload.package }}/readme.md
+
+      - name: Make Docker and Git tags
+        run: make --file ${{ github.event.client_payload.package }}/Makefile tags version=${{ github.event.client_payload.version }}
+
+      - name: Git push
+        run: git push --force --tags origin master
+
+      - name: Docker login
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login -u ${{ github.actor }} --password-stdin docker.pkg.github.com
+
+      - name: Docker push
+        run: docker push docker.pkg.github.com/nextools/images/${{ github.event.client_payload.package }}
