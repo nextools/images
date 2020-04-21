@@ -1,6 +1,6 @@
 # chromium
 
-![version](https://img.shields.io/badge/version-80.0.3987.163-blue.svg?style=flat-square) ![size](https://img.shields.io/badge/size-150M-blue.svg?style=flat-square)
+[![version](https://img.shields.io/badge/version-80.0.3987.163-blue.svg?style=flat-square)](https://www.chromestatus.com/features/schedule) [![size](https://img.shields.io/badge/size-150M-blue.svg?style=flat-square)](https://github.com/nextools/images/packages/165734)
 
 Dockerized Chromium in [headless + remote debugging mode](https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md).
 
