@@ -23,5 +23,6 @@ tags:
 		fi; \
 		echo $$tag; \
 		docker tag chromium docker.pkg.github.com/nextools/images/chromium:$$tag; \
+		docker tag chromium nextools/chromium:$$tag; \
 		git tag --force chromium@$$tag; \
 	done

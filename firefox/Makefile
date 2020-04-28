@@ -23,5 +23,6 @@ tags:
 		fi; \
 		echo $$tag; \
 		docker tag firefox docker.pkg.github.com/nextools/images/firefox:$$tag; \
+		docker tag firefox nextools/firefox:$$tag; \
 		git tag --force firefox@$$tag >/dev/null 2>&1; \
 	done

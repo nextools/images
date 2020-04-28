@@ -45,8 +45,14 @@ jobs:
       - name: Git push
         run: git push --force --tags origin master
 
-      - name: Docker login
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login -u ${{ github.actor }} --password-stdin docker.pkg.github.com
+      - name: Docker GitHub Packages login
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login --username ${{ github.actor }} --password-stdin docker.pkg.github.com
 
-      - name: Docker push
+      - name: Docker GitHub Packages push
         run: docker push docker.pkg.github.com/nextools/images/${{ github.event.client_payload.package }}
+
+      - name: Docker Hub login
+        run: echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login --username nextoolsbot --password-stdin
+
+      - name: Docker Hub push
+        run: docker push nextools/${{ github.event.client_payload.package }}
