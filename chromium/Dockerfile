@@ -8,9 +8,9 @@ RUN apt-get update \
     # https://github.com/phusion/baseimage-docker/issues/319
     && apt-get install --yes apt-utils 2>&1 | grep -v "debconf: delaying package configuration, since apt-utils is not installed" \
     && apt-get install --no-install-recommends --yes \
-        chromium-browser=${VERSION}\* \
         dumb-init \
         fontconfig \
+        chromium-browser=${VERSION}\* \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd chromium \
     && useradd --create-home --gid chromium chromium \

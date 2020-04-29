@@ -13,10 +13,10 @@ RUN apt-get update \
     && add-apt-repository --yes ppa:ubuntu-mozilla-daily/ppa \
     && apt-get update \
     && apt-get --no-install-recommends --yes install \
-        firefox-trunk=${VERSION}\* \
         dumb-init \
         socat \
         fontconfig \
+        firefox-trunk=${VERSION}\* \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd firefox \
     && useradd --create-home --gid firefox firefox \
