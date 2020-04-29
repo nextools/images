@@ -41,4 +41,4 @@ jobs:
       - name: Publish
         if: steps.check_status.outputs.result == 'outdated'
         run: |
-          curl --header 'Accept: application/vnd.github.everest-preview+json' --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' --request POST --data '{"event_type": "publish", "client_payload": { "package": "${{ matrix.package }}", "version": "${{ steps.get_version.outputs.result }}" }}' https://api.github.com/repos/${GITHUB_REPOSITORY}/dispatches
+          curl --header 'Accept: application/vnd.github.everest-preview+json' --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' --request POST --data '{"event_type": "publish", "client_payload": { "package": "${{ matrix.package }}", "version": "${{ steps.get_version.outputs.result }}" }}' https://api.github.com/repos/nextools/images/dispatches

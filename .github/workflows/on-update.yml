@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Build image
         run: make --file ${{ github.event.client_payload.package }}/Makefile build version=${{ github.event.client_payload.version }}
 
