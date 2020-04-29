@@ -15,7 +15,7 @@ jobs:
       matrix:
         package:
           - chromium
-          # - firefox
+          - firefox
 
     steps:
       - name: Checkout
