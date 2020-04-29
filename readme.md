@@ -1,6 +1,6 @@
 # images
 
-Monorepo of Docker images auto-published to [GitHub Packages](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages).
+Monorepo of Docker images auto-published to [Docker Hub](https://hub.docker.com/repositories/nextools) and [GitHub Packages](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages).
 
 ## Login
 
