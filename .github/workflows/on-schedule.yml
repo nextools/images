@@ -38,7 +38,51 @@ jobs:
           echo version: ${{ steps.get_version.outputs.result }}
           echo status: ${{ steps.check_status.outputs.result }}
 
-      - name: Publish
+      - name: Build image
         if: steps.check_status.outputs.result == 'outdated'
+        run: make --file ${{ matrix.package }}/Makefile build version=${{ steps.get_version.outputs.result }}
+
+      - name: Test
+        run: make --file ${{ matrix.package }}/Makefile test
+
+      - name: Get image size
+        id: get_size
         run: |
-          curl --header 'Accept: application/vnd.github.everest-preview+json' --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' --request POST --data '{"event_type": "publish", "client_payload": { "package": "${{ matrix.package }}", "version": "${{ steps.get_version.outputs.result }}" }}' https://api.github.com/repos/nextools/images/dispatches
+          docker save ${{ matrix.package }} | gzip > ${{ matrix.package }}.tar.gz
+          echo ::set-output name=result::$(du --human-readable --apparent-size ${{ matrix.package }}.tar.gz | cut --fields=1)
+          rm ${{ matrix.package }}.tar.gz
+
+      - name: Git setup
+        run: |
+          git config --global user.name 'GitHub'
+          git config --global user.email 'noreply@github.com'
+          git remote set-url origin https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
+
+      - name: Git pull
+        run: git pull origin master
+
+      - name: Update readme
+        run: |
+          sed --regexp-extended --in-place 's/version-[[:alnum:].]+-blue/version-'${{ steps.get_version.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
+          sed --regexp-extended --in-place 's/size-[[:alnum:].]+-blue/size-'${{ steps.get_size.outputs.result }}'-blue/' ${{ matrix.package }}/readme.md
+
+      - name: Git commit
+        run: git commit --message '♻️ ${{ matrix.package }}@${{ steps.get_version.outputs.result }}' ${{ matrix.package }}/readme.md
+
+      - name: Make Docker and Git tags
+        run: make --file ${{ matrix.package }}/Makefile tags version=${{ steps.get_version.outputs.result }}
+
+      - name: Git push
+        run: git push --force --tags origin master
+
+      - name: Docker GitHub Packages login
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login --username ${{ github.actor }} --password-stdin docker.pkg.github.com
+
+      - name: Docker GitHub Packages push
+        run: docker push docker.pkg.github.com/nextools/images/${{ matrix.package }}
+
+      - name: Docker Hub login
+        run: echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login --username nextoolsbot --password-stdin
+
+      - name: Docker Hub push
+        run: docker push nextools/${{ matrix.package }}
