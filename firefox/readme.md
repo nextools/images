@@ -1,6 +1,6 @@
 # firefox
 
-[![version](https://img.shields.io/badge/version-latest-blue.svg?style=flat-square)](https://www.mozilla.org/en-US/firefox/releases/) [![size](https://img.shields.io/badge/size-146M-blue.svg?style=flat-square)](https://github.com/nextools/images/packages/166489)
+[![version](https://img.shields.io/badge/version-77.0a1-blue.svg?style=flat-square)](https://www.mozilla.org/en-US/firefox/releases/) [![size](https://img.shields.io/badge/size-146M-blue.svg?style=flat-square)](https://github.com/nextools/images/packages/166489)
 
 Dockerized Firefox in [headless + remote debugging mode](https://wiki.mozilla.org/Remote).
 
