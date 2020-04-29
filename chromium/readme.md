@@ -8,7 +8,7 @@ Dockerized Chromium in [headless + remote debugging mode](https://chromium.googl
 
 ### Versions
 
-Chromium version is atomatically split into multiple Docker tags ("versions"), for example version `80.0.3987.87` produces `80`, `80.0`, `80.0.3987`, `80.0.3987.87` and `latest`. See the [list of versions available to use](https://github.com/nextools/images/packages/165734/versions).
+Chromium version is atomatically split into multiple Docker tags ("versions"), for example version `80.0.3987.87` produces `80`, `80.0`, `80.0.3987`, `80.0.3987.87` and `latest`. See the [list of versions available to use](https://hub.docker.com/repository/docker/nextools/chromium/tags).
 
 ### Run
 

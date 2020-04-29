@@ -4,23 +4,29 @@
 
 Dockerized Firefox in [headless + remote debugging mode](https://wiki.mozilla.org/Remote).
 
-The [same CDP protocol as in Chromium](https://wiki.mozilla.org/Remote) finally comes to Firefox starting with version 76, allowing to [use Puppeteer with Firefox directly and as is](https://github.com/puppeteer/puppeteer/issues/5397). Currently is in `nightly` alpha state and only `latest` version is available which we update _manually_ from time to time.
+The [same CDP protocol as in Chromium](https://wiki.mozilla.org/Remote) finally comes to Firefox, allowing to [use Puppeteer with Firefox directly and as is](https://github.com/puppeteer/puppeteer/issues/5397). Currently available only as [nightly alpha builds](https://launchpad.net/~ubuntu-mozilla-daily/+archive/ubuntu/ppa).
 
 ## Usage
 
-### Login
-
-See [login section](../readme.md#login) in the root readme.
-
 ### Versions
 
-Firefox version is atomatically split into multiple Docker tags ("versions"), for example version `76.0` produces `76`, `76.0` and `latest`.  See the [list of versions available to use](https://github.com/nextools/images/packages/166489/versions).
+See the [list of versions available to use](https://hub.docker.com/repository/docker/nextools/firefox/tags).
 
 ### Run
+
+#### Docker Hub
+
+```sh
+docker run -it --rm -p 9222:9222 nextools/firefox:<VERSION>
+```
+
+#### GitHub Packages
 
 ```sh
 docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/firefox:<VERSION>
 ```
+
+See [login section](../readme.md#login) in the root readme.
 
 ### Puppeteer
 
@@ -50,13 +56,13 @@ await browser.close()
 Container uses a `RD_PORT` [environment variable](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file), which is `9222` by default:
 
 ```
-docker run -it --rm -p 9223:9223 -e RD_PORT=9223 docker.pkg.github.com/nextools/images/firefox:<VERSION>
+docker run -it --rm -p 9223:9223 -e RD_PORT=9223 nextools/firefox:<VERSION>
 ```
 
 ### pass additional Firefox arguments
 
 ```
-docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/firefox:<VERSION> --some-firefox-arg
+docker run -it --rm -p 9222:9222 nextools/firefox:<VERSION> --some-firefox-arg
 ```
 
 ### add custom fonts
@@ -64,5 +70,5 @@ docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/firefox:<
 It's possible to mount a folder with custom fonts to be used later by Firefox: 
 
 ```
-docker run -it --rm -p 9222:9222 -v $(pwd)/path/to/fonts:/home/firefox/.fonts docker.pkg.github.com/nextools/images/firefox:<VERSION>
+docker run -it --rm -p 9222:9222 -v $(pwd)/path/to/fonts:/home/firefox/.fonts nextools/firefox:<VERSION>
 ```
