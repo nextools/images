@@ -2,7 +2,7 @@
 
 Monorepo of Docker images auto-published to [Docker Hub](https://hub.docker.com/repositories/nextools) and [GitHub Packages](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages).
 
-## Login
+## GitHub Packages
 
 This is fantastic but [you have to login to GitHub Packages with Docker even to pull images](https://github.community/t5/GitHub-Actions/docker-pull-from-public-GitHub-Package-Registry-fail-with-quot/td-p/32782):
 
