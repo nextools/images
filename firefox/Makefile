@@ -3,6 +3,7 @@
 CURRENT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 get-version:
+	@docker pull ubuntu:bionic > /dev/null 2>&1
 	@docker run --rm \
 		ubuntu:bionic \
 		sh -c "apt-get update --quiet=2 && apt-get --yes install software-properties-common > /dev/null 2>&1 && add-apt-repository --yes ppa:ubuntu-mozilla-daily/ppa > /dev/null 2>&1 && apt-get update --quiet=2 && apt-cache policy firefox-trunk | sed --regexp-extended --quiet 's/.*Candidate: ([0-9.]+)~([a-z0-9]+)\~.+/\1\2/p'"

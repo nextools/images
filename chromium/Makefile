@@ -3,6 +3,7 @@
 CURRENT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 get-version:
+	@docker pull ubuntu:bionic > /dev/null 2>&1
 	@docker run --rm \
 		ubuntu:bionic \
 		sh -c "apt-get update --quiet=2 && apt-cache policy chromium-browser | sed --regexp-extended --quiet 's/.*Candidate: ([0-9.]+)-.+/\1/p'"
