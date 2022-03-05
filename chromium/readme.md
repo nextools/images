@@ -1,6 +1,6 @@
 # chromium
 
-[![version](https://flat.badgen.net/badge/version/97.0.4692.71/blue)](https://www.chromestatus.com/features/schedule) [![size](https://flat.badgen.net/badge/size/149M/blue)](https://hub.docker.com/repository/docker/nextools/chromium/tags)
+[![version](https://flat.badgen.net/badge/version/99.0.4844.51/blue)](https://www.chromestatus.com/features/schedule) [![size](https://flat.badgen.net/badge/size/139M/blue)](https://hub.docker.com/repository/docker/nextools/chromium/tags)
 
 Dockerized Chromium in [headless + remote debugging mode](https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md).
 
