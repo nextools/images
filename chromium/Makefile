@@ -9,7 +9,7 @@ get-version:
 		sh -c "apt-get update --quiet=2 && apt-cache policy chromium-browser | sed --regexp-extended --quiet 's/.*Candidate: ([0-9.]+)-.+/\1/p'"
 
 build:
-	@docker build --tag chromium --build-arg VERSION=$(version) $(CURRENT_DIR)
+	@docker buildx build --platform linux/arm64,linux/amd64 --tag chromium --build-arg VERSION=$(version) $(CURRENT_DIR)
 
 test:
 	@docker run --detach --publish 9222:9222 --name chromium chromium
