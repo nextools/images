@@ -20,6 +20,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        
+      - name: Install buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          version: latest
 
       # https://github.com/actions/checkout#Fetch-all-tags
       - name: Fetch tags
