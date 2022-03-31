@@ -13,16 +13,16 @@ Auto-updatable every 12 hours (currently available only as [nightly alpha builds
 ### Docker Hub
 
 ```sh
-docker run -it --rm -p 9222:9222 nextools/firefox:<TAG>
+docker run -it --rm -p 9222:9222 neuralegion/nextools-firefox:<TAG>
 ```
 
-### GitHub Packages
+<!-- ### GitHub Packages
 
 ```sh
 docker run -it --rm -p 9222:9222 docker.pkg.github.com/nextools/images/firefox:<TAG>
 ```
 
-See [login caveats](../readme.md#github-packages) in the root readme.
+See [login caveats](../readme.md#github-packages) in the root readme. -->
 
 ### Puppeteer
 
@@ -52,19 +52,19 @@ await browser.close()
 Container uses a `RD_PORT` [environment variable](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file), which is `9222` by default:
 
 ```
-docker run -it --rm -p 9223:9223 -e RD_PORT=9223 nextools/firefox:<TAG>
+docker run -it --rm -p 9223:9223 -e RD_PORT=9223 neuralegion/nextools-firefox:<TAG>
 ```
 
 ### pass additional Firefox arguments
 
 ```
-docker run -it --rm -p 9222:9222 nextools/firefox:<TAG> --some-firefox-arg
+docker run -it --rm -p 9222:9222 neuralegion/nextools-firefox:<TAG> --some-firefox-arg
 ```
 
 ### add custom fonts
 
-It's possible to mount a folder with custom fonts to be used later by Firefox: 
+It's possible to mount a folder with custom fonts to be used later by Firefox:
 
 ```
-docker run -it --rm -p 9222:9222 -v $(pwd)/path/to/fonts:/home/firefox/.fonts nextools/firefox:<TAG>
+docker run -it --rm -p 9222:9222 -v $(pwd)/path/to/fonts:/home/firefox/.fonts neuralegion/nextools-firefox:<TAG>
 ```
