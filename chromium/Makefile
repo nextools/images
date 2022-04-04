@@ -9,10 +9,10 @@ get-version:
 		sh -c "apt-get update --quiet=2 && apt-cache policy chromium-browser | sed --regexp-extended --quiet 's/.*Candidate: ([0-9.]+)-.+/\1/p'"
 
 build:
-	@docker build --tag nextools-chromium --build-arg VERSION=$(version) $(CURRENT_DIR)
+	@docker build --tag neuralegion/nextools-chromium --build-arg VERSION=$(version) $(CURRENT_DIR)
 
 test:
-	@docker run --detach --publish 9222:9222 --name nextools-chromium nextools-chromium
+	@docker run --detach --publish 9222:9222 --name nextools-chromium neuralegion/nextools-chromium
 	@timeout 20s sh -c "trap 'docker container rm --force nextools-chromium' 0; until curl http://localhost:9222/json/version; do sleep 1; done"
 
 # tags:
@@ -37,5 +37,5 @@ tags:
 		fi; \
 		echo $$tag; \
 		docker tag nextools-chromium neuralegion/nextools-chromium:$$tag; \
-		git tag --force chromium@$$tag; \
+		git tag --force nextools-chromium@$$tag; \
 	done

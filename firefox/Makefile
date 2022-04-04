@@ -10,10 +10,10 @@ get-version:
 
 build:
 	@_version=`echo $(version) | sed --regexp-extended s/a/~a/`
-	@docker build --tag nextools-firefox --build-arg VERSION=$$_version $(CURRENT_DIR)
+	@docker build --tag neuralegion/nextools-firefox --build-arg VERSION=$$_version $(CURRENT_DIR)
 
 test:
-	@docker run --detach --publish 9222:9222 --name nextools-firefox nextools-firefox
+	@docker run --detach --publish 9222:9222 --name nextools-firefox neuralegion/nextools-firefox
 	@timeout 20s sh -c "trap 'docker container rm --force nextools-firefox' 0; until curl http://localhost:9222/json/version; do sleep 1; done"
 
 # tags:
@@ -28,5 +28,5 @@ tags:
 	@for tag in $(version) latest; do \
 		echo $$tag; \
 		docker tag nextools-firefox neuralegion/nextools-firefox:$$tag; \
-		git tag --force firefox@$$tag >/dev/null 2>&1; \
+		git tag --force nextools-firefox@$$tag >/dev/null 2>&1; \
 	done
