@@ -1,0 +1,35 @@
+name: Docker Image CI
+
+on:
+  schedule:
+    - cron: 0 0 * * 3
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        package:
+          - chromium
+          # - firefox
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=result::$(make --file ${{ matrix.package }}/Makefile get-version)
+
+      - name: Build image
+        run: make --file ${{ matrix.package }}/Makefile build version=${{ steps.get_version.outputs.result }}
+
+      - name: Login into Docker
+        run: docker login --username=anatol1988 --password=${{ secrets.DOCKER_TOKEN }}
+
+      - name: Push image to Docker
+        run: docker push neuralegion/nextools-${{ matrix.package }}
