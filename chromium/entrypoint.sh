@@ -32,4 +32,5 @@ fi
   --remote-debugging-port="$RD_PORT" \
   --safebrowsing-disable-auto-update \
   --user-data-dir=/home/chromium/ \
+  --window-size=1920,1080 \
   "$@"
