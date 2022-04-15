@@ -8,6 +8,8 @@ RUN apt-get update \
     # https://github.com/phusion/baseimage-docker/issues/319
     && apt-get install --yes apt-utils 2>&1 | grep -v "debconf: delaying package configuration, since apt-utils is not installed" \
     && apt-get install --no-install-recommends --yes \
+        htop \
+        net-tools \
         dumb-init \
         fontconfig \
         chromium-browser=${VERSION}\* \
