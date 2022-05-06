@@ -1,6 +1,6 @@
 # firefox
 
-[![version](https://flat.badgen.net/badge/version/101.0a1/blue)](https://www.mozilla.org/en-US/firefox/releases/) [![size](https://flat.badgen.net/badge/size/154M/blue)](https://hub.docker.com/repository/docker/nextools/firefox/tags)
+[![version](https://flat.badgen.net/badge/version/102.0a1/blue)](https://www.mozilla.org/en-US/firefox/releases/) [![size](https://flat.badgen.net/badge/size/154M/blue)](https://hub.docker.com/repository/docker/nextools/firefox/tags)
 
 Dockerized Firefox in [headless + remote debugging mode](https://wiki.mozilla.org/Remote).
 
