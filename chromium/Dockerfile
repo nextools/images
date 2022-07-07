@@ -13,6 +13,7 @@ RUN apt-get update \
         dumb-init \
         fontconfig \
         chromium-browser=${VERSION}\* \
+        curl \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd chromium \
     && useradd --create-home --gid chromium chromium \
