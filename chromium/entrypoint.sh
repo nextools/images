@@ -4,7 +4,7 @@ if [ "$(ls -A /home/chromium/.fonts/)" ]; then
   fc-cache -f -v
 fi
 
-ulimit -n 65000 && ulimit -p 65000 && /usr/bin/chromium-browser \
+(ulimit -n 65000 || true) && (ulimit -p 65000 || true) && /usr/bin/chromium-browser \
   --disable-background-networking \
   --disable-background-timer-throttling \
   --disable-backgrounding-occluded-windows \
