@@ -16,6 +16,7 @@ jobs:
         package:
           - chromium
           - chromium-headful
+          # - firefox
 
     steps:
       - name: Checkout
