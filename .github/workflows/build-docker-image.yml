@@ -45,5 +45,5 @@ jobs:
         run: eval $(aws ecr get-login --no-include-email)
 
       - name: Push Docker image to AWS ECR
-        run: docker push 454884832027.dkr.ecr.us-east-1.amazonaws.com/nextools-${{ matrix.package }}
+        run: docker push 454884832027.dkr.ecr.us-east-1.amazonaws.com/nextools-chromium:${{ matrix.package }}
 
