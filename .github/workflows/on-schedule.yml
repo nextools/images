@@ -15,6 +15,7 @@ jobs:
       matrix:
         package:
           - chromium
+          - chromium-headful
           # - firefox
 
     steps:
@@ -83,14 +84,6 @@ jobs:
       - name: Git push
         if: steps.check_status.outputs.result == 'outdated'
         run: git push --force --tags origin master
-
-      # - name: Docker GitHub Packages login
-      #   if: steps.check_status.outputs.result == 'outdated'
-      #   run: echo ${{ secrets.GITHUB_TOKEN }} | docker login --username ${{ github.actor }} --password-stdin docker.pkg.github.com
-
-      # - name: Docker GitHub Packages push
-      #   if: steps.check_status.outputs.result == 'outdated'
-      #   run: docker push docker.pkg.github.com/nextools/images/${{ matrix.package }}
 
       - name: Login into Docker
         if: steps.check_status.outputs.result == 'outdated'

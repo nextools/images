@@ -4,7 +4,11 @@ if [ "$(ls -A /home/chromium/.fonts/)" ]; then
   fc-cache -f -v
 fi
 
-(ulimit -n 65000 || true) && (ulimit -p 65000 || true) && /usr/bin/chromium-browser \
+ip=$(hostname --ip-address)
+socat tcp-listen:"$RD_PORT",bind="$ip",fork tcp:0.0.0.0:"$RD_PORT" &
+(ulimit -n 65000 || true) && (ulimit -p 65000 || true) && \
+  xvfb-run -a \
+  /usr/bin/chromium-browser \
   --enable-automation \
   --disable-background-networking \
   --disable-background-timer-throttling \
@@ -20,9 +24,9 @@ fi
   --disable-prompt-on-repost \
   --disable-sync \
   --disable-translate \
+  --disable-setuid-sandbox \
   --disable-ipc-flooding-protection \
   --disable-component-update \
-  --headless \
   --hide-scrollbars \
   --ignore-certificate-errors \
   --ignore-certificate-errors-spki-list \
