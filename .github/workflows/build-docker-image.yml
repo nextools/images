@@ -2,10 +2,16 @@ name: Docker Image CI
 
 on:
   schedule:
-    - cron: 0 0 * * 3
+    - cron: 0 0 * * 7
   push:
     branches:
       - master
+
+  strategy:
+    matrix:
+      package:
+        - chromium
+        - chromium-headful
 
 jobs:
   build:
@@ -23,20 +29,20 @@ jobs:
 
       - name: Get version
         id: get_version
-        run: echo ::set-output name=result::$(make --file chromium/Makefile get-version)
+        run: echo ::set-output name=result::$(make --file ${{ matrix.package }}/Makefile get-version)
 
       - name: Build image
-        run: make --file chromium/Makefile build version=${{ steps.get_version.outputs.result }}
+        run: make --file ${{ matrix.package }}/Makefile build version=${{ steps.get_version.outputs.result }}
 
       - name: Login into Docker
         run: docker login --username=anatol1988 --password=${{ secrets.DOCKER_TOKEN }}
 
       - name: Push image to Docker
-        run: docker push neuralegion/nextools-chromium
+        run: docker push neuralegion/nextools-${{ matrix.package }}
 
       - name: Login in ECR
         run: eval $(aws ecr get-login --no-include-email)
 
       - name: Push Docker image to AWS ECR
-        run: docker push 454884832027.dkr.ecr.us-east-1.amazonaws.com/nextools-chromium
+        run: docker push 454884832027.dkr.ecr.us-east-1.amazonaws.com/nextools-${{ matrix.package }}
 
