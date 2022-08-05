@@ -7,16 +7,17 @@ on:
     branches:
       - master
 
-  strategy:
-    matrix:
-      package:
-        - chromium
-        - chromium-headful
-
 jobs:
   build:
     runs-on: ubuntu-latest
     container: neuralegion/devops
+
+    strategy:
+      matrix:
+        package:
+          - chromium
+          - chromium-headful
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
