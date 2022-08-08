@@ -4,8 +4,8 @@ on:
   repository_dispatch:
     types: check
   schedule:
-    # every 12 hours
-    - cron:  '0 */12 * * *'
+    # every 3 days
+    - cron: 0 0 * * 3
 
 jobs:
   check:
@@ -16,7 +16,6 @@ jobs:
         package:
           - chromium
           - chromium-headful
-          # - firefox
 
     steps:
       - name: Checkout
@@ -32,7 +31,7 @@ jobs:
 
       - name: Check status
         id: check_status
-        run: echo ::set-output name=result::$(git tag | grep --quiet ${{ matrix.package }}@${{ steps.get_version.outputs.result }} && echo 'up-to-date' || echo 'outdated')
+        run: echo ::set-output name=result::$(git tag | grep --quiet chromium@${{ steps.get_version.outputs.result }} && echo 'up-to-date' || echo 'outdated')
 
       - name: Print results
         run: |
