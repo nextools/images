@@ -22,7 +22,7 @@ fi
   --disable-translate \
   --disable-ipc-flooding-protection \
   --disable-component-update \
-  --headless \
+  --headless=chrome \
   --hide-scrollbars \
   --ignore-certificate-errors \
   --ignore-certificate-errors-spki-list \
@@ -37,4 +37,5 @@ fi
   --safebrowsing-disable-auto-update \
   --user-data-dir=/home/chromium/ \
   --window-size=1920,1080 \
+  --site-per-process\
   "$@"
