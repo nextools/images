@@ -17,6 +17,7 @@ jobs:
         package:
           - chromium
           - chromium-headful
+          - chrome
 
     steps:
       - name: Checkout
