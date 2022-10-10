@@ -16,10 +16,11 @@ RUN apt-get update \
         curl \
         xvfb \
         socat \
-    && rm -rf /var/lib/apt/lists/* \
-    && groupadd chromium \
-    && useradd --create-home --gid chromium chromium \
-    && chown --recursive chromium:chromium /home/chromium/
+    && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd chromium
+RUN useradd --create-home --gid chromium chromium
+RUN chown --recursive chromium:chromium /home/chromium/
 
 VOLUME ["/home/chromium/.fonts"]
 

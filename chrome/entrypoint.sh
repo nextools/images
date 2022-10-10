@@ -1,10 +1,10 @@
 #!/bin/sh
 
-if [ "$(ls -A /home/chromium/.fonts/)" ]; then
+if [ "$(ls -A /home/chrome/.fonts/)" ]; then
   fc-cache -f -v
 fi
 
-(ulimit -n 65000 || true) && (ulimit -p 65000 || true) && /usr/bin/chromium-browser \
+(ulimit -n 65000 || true) && (ulimit -p 65000 || true) && google-chrome-stable \
   --enable-automation \
   --disable-background-networking \
   --disable-background-timer-throttling \
@@ -20,9 +20,13 @@ fi
   --disable-prompt-on-repost \
   --disable-sync \
   --disable-translate \
+  --disable-component-extensions-with-background-pages \
+  --deny-permission-prompts \
+  --noerrdialogs \
+  --disable-hang-monitor \
   --disable-ipc-flooding-protection \
   --disable-component-update \
-  --headless \
+  --headless=chrome \
   --hide-scrollbars \
   --ignore-certificate-errors \
   --ignore-certificate-errors-spki-list \
@@ -35,6 +39,6 @@ fi
   --remote-debugging-address=0.0.0.0 \
   --remote-debugging-port="$RD_PORT" \
   --safebrowsing-disable-auto-update \
-  --user-data-dir=/home/chromium/ \
+  --user-data-dir=/home/chrome/ \
   --window-size=1920,1080 \
   "$@"

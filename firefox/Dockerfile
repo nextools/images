@@ -17,10 +17,11 @@ RUN apt-get update \
         socat \
         fontconfig \
         firefox-trunk=${VERSION}\* \
-    && rm -rf /var/lib/apt/lists/* \
-    && groupadd firefox \
-    && useradd --create-home --gid firefox firefox \
-    && chown --recursive firefox:firefox /home/firefox/
+    && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd firefox
+RUN useradd --create-home --gid firefox firefox
+RUN chown --recursive firefox:firefox /home/firefox/
 
 VOLUME ["/home/firefox/.fonts"]
 
