@@ -22,6 +22,7 @@ fi
   --disable-translate \
   --disable-component-extensions-with-background-pages \
   --deny-permission-prompts \
+  --disable-print-preview \
   --noerrdialogs \
   --disable-hang-monitor \
   --disable-ipc-flooding-protection \
