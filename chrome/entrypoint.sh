@@ -27,8 +27,7 @@ fi
   --disable-hang-monitor \
   --disable-ipc-flooding-protection \
   --disable-component-update \
-  # --headless=chrome \
-  --headless
+  --headless \
   --hide-scrollbars \
   --ignore-certificate-errors \
   --ignore-certificate-errors-spki-list \
