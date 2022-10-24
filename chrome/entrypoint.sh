@@ -4,7 +4,7 @@ if [ "$(ls -A /home/chrome/.fonts/)" ]; then
   fc-cache -f -v
 fi
 
-(ulimit -n 65000 || true) && (ulimit -p 65000 || true) && google-chrome-stable \
+(ulimit -n 65000 || true) && (ulimit -p 65000 || true) && exec google-chrome-stable \
   --enable-automation \
   --disable-background-networking \
   --disable-background-timer-throttling \
