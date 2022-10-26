@@ -4,6 +4,9 @@ if [ "$(ls -A /home/chrome/.fonts/)" ]; then
   fc-cache -f -v
 fi
 
+ip=$(hostname --ip-address)
+socat tcp-listen:$RD_PORT,bind="$ip",fork tcp:127.0.0.1:$RD_PORT &
+
 (ulimit -n 65000 || true) && (ulimit -p 65000 || true) && exec google-chrome-stable \
   --enable-automation \
   --disable-background-networking \
@@ -27,7 +30,7 @@ fi
   --disable-hang-monitor \
   --disable-ipc-flooding-protection \
   --disable-component-update \
-  --headless \
+  --headless=chrome \
   --hide-scrollbars \
   --ignore-certificate-errors \
   --ignore-certificate-errors-spki-list \
