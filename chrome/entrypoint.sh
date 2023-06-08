@@ -45,4 +45,5 @@ socat tcp-listen:$RD_PORT,bind="$ip",fork tcp:127.0.0.1:$RD_PORT &
   --safebrowsing-disable-auto-update \
   --user-data-dir=/home/chrome/ \
   --window-size=1920,1080 \
+  --site-per-process
   "$@"
