@@ -9,7 +9,7 @@ CURRENT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 # 		sh -c "apt-get update --quiet=2 && apt-cache policy chromium-browser | sed --regexp-extended --quiet 's/.*Candidate: ([0-9.]+)-.+/\1/p'"
 
 get-version:
-	echo "110.0.5481.177-1"
+	@echo "110.0.5481.177-1"
 
 build:
 	@docker build --tag neuralegion/nextools-chrome --tag 454884832027.dkr.ecr.us-east-1.amazonaws.com/nextools-chrome --build-arg VERSION=$(version) $(CURRENT_DIR)
