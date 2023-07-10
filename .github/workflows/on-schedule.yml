@@ -7,6 +7,10 @@ on:
     # every 12 hours
     - cron: '0 */12 * * *'
 
+    
+env:
+  DOCKER_DEFAULT_PLATFORM: linux/amd64
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -20,12 +24,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        
+      - name: Install buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          version: latest
 
       # https://github.com/actions/checkout#Fetch-all-tags
       - name: Fetch tags
         run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
-      - name: Get version
+      - name: Get version (browser)
         id: get_version
         run: echo ::set-output name=result::$(make --file ${{ matrix.package }}/Makefile get-version)
 
@@ -39,9 +49,19 @@ jobs:
           echo version: ${{ steps.get_version.outputs.result }}
           echo status: ${{ steps.check_status.outputs.result }}
 
-      - name: Build image
+      - name: Docker GitHub Packages login
         if: steps.check_status.outputs.result == 'outdated'
-        run: make --file ${{ matrix.package }}/Makefile build version=${{ steps.get_version.outputs.result }}
+        # TODO: Change this back DOCKER_DEPLOYER to GITHUB_TOKEN
+        run: echo ${{ secrets.DOCKER_DEPLOYER }} | docker login --username ${{ github.actor }} --password-stdin docker.pkg.github.com
+      
+      - name: Docker Hub login
+        if: steps.check_status.outputs.result == 'outdated'
+        run: echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login --username nextoolsbot --password-stdin
+
+      - name: Build image (push)
+        if: steps.check_status.outputs.result == 'outdated'
+        id: build
+        run: echo ::set-output name=result::$(make --file ${{ matrix.package }}/Makefile build version=${{ steps.get_version.outputs.result }})
 
       - name: Test
         if: steps.check_status.outputs.result == 'outdated'
@@ -51,6 +71,7 @@ jobs:
         id: get_size
         if: steps.check_status.outputs.result == 'outdated'
         run: |
+          docker pull ${{ steps.build.outputs.result }}
           docker save ${{ matrix.package }} | gzip > ${{ matrix.package }}.tar.gz
           echo ::set-output name=result::$(du --human-readable --apparent-size ${{ matrix.package }}.tar.gz | cut --fields=1)
           rm ${{ matrix.package }}.tar.gz
@@ -83,19 +104,3 @@ jobs:
       - name: Git push
         if: steps.check_status.outputs.result == 'outdated'
         run: git push --force --tags origin master
-
-      - name: Docker GitHub Packages login
-        if: steps.check_status.outputs.result == 'outdated'
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login --username ${{ github.actor }} --password-stdin docker.pkg.github.com
-
-      - name: Docker GitHub Packages push
-        if: steps.check_status.outputs.result == 'outdated'
-        run: docker push docker.pkg.github.com/nextools/images/${{ matrix.package }}
-
-      - name: Docker Hub login
-        if: steps.check_status.outputs.result == 'outdated'
-        run: echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login --username nextoolsbot --password-stdin
-
-      - name: Docker Hub push
-        if: steps.check_status.outputs.result == 'outdated'
-        run: docker push nextools/${{ matrix.package }}
