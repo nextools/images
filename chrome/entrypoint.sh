@@ -4,6 +4,7 @@ if [ "$(ls -A /home/chrome/.fonts/)" ]; then
   fc-cache -f -v
 fi
 
+# just ci test
 ip=$(hostname --ip-address)
 socat tcp-listen:$RD_PORT,bind="$ip",fork tcp:127.0.0.1:$RD_PORT &
 
