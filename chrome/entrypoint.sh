@@ -38,7 +38,6 @@ socat tcp-listen:$RD_PORT,bind="$ip",fork tcp:127.0.0.1:$RD_PORT &
   --metrics-recording-only \
   --mute-audio \
   --no-first-run \
-  --no-sandbox \
   --no-default-browser-check \
   --remote-debugging-address=0.0.0.0 \
   --remote-debugging-port="$RD_PORT" \
