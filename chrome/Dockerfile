@@ -13,7 +13,6 @@ RUN apt-get update \
     && wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${VERSION}_amd64.deb \
     && apt-get update \
     && apt-get install --no-install-recommends -y \
-      libosmesa \
       /tmp/chrome.deb \
       fonts-ipafont-gothic \
       fonts-wqy-zenhei \
